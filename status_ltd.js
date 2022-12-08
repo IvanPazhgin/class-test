@@ -20,15 +20,15 @@ class TreeStore {
     })
     return result
   }
-  getAllChildren(id) {
-    const children1 = this.getChildren(id)
-    const children2 = []
-    for (let item of children1) {
-      const temp = this.getChildren(item.id)
-      children2.push(...temp)
-    }
-    children1.push(...children2)
-    return children1
+  getAllChildren(id){
+    let children = this.getChildren(id)
+    const result = []
+
+    children.forEach(element => {
+      const temp = this.getAllChildren(element.id)
+      result.push(...temp)
+    })
+    return [...children, ...result]
   }
   getAllParents(id) {
     const result = []
@@ -62,8 +62,9 @@ console.log(ts.getItem(7)); // {"id":7,"parent":4,"type":null}
 console.log(ts.getChildren(4)) // [{"id":7,"parent":4,"type":null},{"id":8,"parent":4,"type":null}]
 console.log(ts.getChildren(5)) // []
 console.log(ts.getChildren(2)) // [{"id":4,"parent":2,"type":"test"},{"id":5,"parent":2,"type":"test"},{"id":6,"parent":2,"type":"test"}]
-console.log(ts.getAllChildren(2)); // [{"id":4,"parent":2,"type":"test"},{"id":5,"parent":2,"type":"test"},{"id":6,"parent":2,"type":"test"},{"id":7,"parent":4,"type":null},{"id":8,"parent":4,"type":null}]
-console.log(ts.getAllParents(7)); // [{"id":4,"parent":2,"type":"test"},{"id":2,"parent":1,"type":"test"},{"id":1,"parent":"root"}]
+console.log(ts.getAllChildren(2)) // [{"id":4,"parent":2,"type":"test"},{"id":5,"parent":2,"type":"test"},{"id":6,"parent":2,"type":"test"},{"id":7,"parent":4,"type":null},{"id":8,"parent":4,"type":null}]
+console.log(ts.getAllChildren(1))
+console.log(ts.getAllParents(7)) // [{"id":4,"parent":2,"type":"test"},{"id":2,"parent":1,"type":"test"},{"id":1,"parent":"root"}]
 
 // ТЗ: https://docs.google.com/forms/d/e/1FAIpQLScLO5TuyHOpe1HhxhHKIlLDgmcICJYwJD-KKJnelU-xSlhB4Q/viewform
 
